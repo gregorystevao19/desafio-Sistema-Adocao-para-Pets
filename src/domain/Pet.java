@@ -4,12 +4,12 @@ public class Pet {
     private String nome;
     private TipoPet tipo;
     private SexoPet sexo;
-    private String endereco;
+    private Endereco endereco;
     private int idade;
     private double peso;
     private String raca;
 
-    public Pet(String nome, TipoPet tipo, SexoPet sexo, String endereco, int idade, double peso, String raca) {
+    public Pet(String nome, TipoPet tipo, SexoPet sexo, Endereco endereco, int idade, double peso, String raca) {
         this.nome = nome;
         this.tipo = tipo;
         this.sexo = sexo;
@@ -43,11 +43,11 @@ public class Pet {
         this.sexo = sexo;
     }
 
-    public String getEndereço() {
+    public Endereco getEndereço() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
 

@@ -1,5 +1,6 @@
 package src;
 
+import src.domain.Endereco;
 import src.domain.Pet;
 import src.domain.SexoPet;
 import src.domain.TipoPet;
@@ -35,7 +36,7 @@ public class Main {
         String nome = "";
         TipoPet tipo = null;
         SexoPet sexo = null;
-        String endereco = "";
+        Endereco endereco = null;
         int idade = 0;
         double peso = 0.0;
         String raca = "";
@@ -118,8 +119,23 @@ public class Main {
                         }
                         break;
                     case 3:
-                        System.out.print("Digite o endereço: ");
-                        endereco = terminalInput.nextLine();
+                        System.out.print("Digite o nome da cidade: ");
+                        String cidade = terminalInput.nextLine();
+                        System.out.print("Digite o nome da rua: ");
+                        String rua = terminalInput.nextLine();
+                        System.out.print("Digite o número da casa: ");
+                        String numeroCasa = terminalInput.nextLine();
+
+                        while (true) {
+                            try {
+                                int numero = Integer.parseInt(numeroCasa);
+                                endereco = new Endereco(numero, rua, cidade);
+                                break;
+                            } catch (NumberFormatException error) {
+                                System.out.print("Por favor, digite um número inteiro válido para o número da casa: ");
+                                numeroCasa = terminalInput.nextLine();
+                            }
+                        }
                         break;
                     case 4:
                         System.out.print("Digite a idade: ");
