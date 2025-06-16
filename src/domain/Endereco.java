@@ -11,4 +11,15 @@ public class Endereco {
         this.cidade = cidade;
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
 }

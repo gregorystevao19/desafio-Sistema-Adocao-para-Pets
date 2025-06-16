@@ -5,11 +5,11 @@ public class Pet {
     private TipoPet tipo;
     private SexoPet sexo;
     private Endereco endereco;
-    private int idade;
+    private double idade;
     private double peso;
     private String raca;
 
-    public Pet(String nome, TipoPet tipo, SexoPet sexo, Endereco endereco, int idade, double peso, String raca) {
+    public Pet(String nome, TipoPet tipo, SexoPet sexo, Endereco endereco, double idade, double peso, String raca) {
         this.nome = nome;
         this.tipo = tipo;
         this.sexo = sexo;
@@ -51,11 +51,11 @@ public class Pet {
         this.endereco = endereco;
     }
 
-    public int getIdade() {
+    public double getIdade() {
         return idade;
     }
 
-    public void setIdade(int idade) {
+    public void setIdade(double idade) {
         this.idade = idade;
     }
 
@@ -79,7 +79,7 @@ public class Pet {
         System.out.println("Nome: " + this.nome);
         System.out.println("Tipo: " + this.tipo);
         System.out.println("Sexo: " + this.sexo);
-        System.out.println("Endereço: " + this.endereco);
+        System.out.println("Endereço: " + this.endereco.getCidade() + ", " + this.endereco.getRua() + ", " + this.endereco.getNumero());
         System.out.println("Idade: " + this.idade);
         System.out.println("Peso: " + this.peso);
         System.out.println("Raça: " + this.raca);

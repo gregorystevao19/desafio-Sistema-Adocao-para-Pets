@@ -2,7 +2,8 @@ package src.domain;
 
 public enum TipoPet {
     CACHORRO("Cachorro"),
-    GATO("Gato");
+    GATO("Gato"),
+    NAO_INFORMADO("Não Informado");
 
     private final String descricao;
 

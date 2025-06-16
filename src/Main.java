@@ -37,9 +37,11 @@ public class Main {
         TipoPet tipo = null;
         SexoPet sexo = null;
         Endereco endereco = null;
-        int idade = 0;
+        double idade = 0.0;
         double peso = 0.0;
         String raca = "";
+
+        final String NAO_INFORMADO = "NÃO INFORMADO";
 
 
         try {
@@ -55,16 +57,19 @@ public class Main {
                             try {
                                 Pattern pattern = Pattern.compile("[^a-z ]", Pattern.CASE_INSENSITIVE);
                                 nome = terminalInput.nextLine();
-                                if (nome.split(" ").length < 2) {
-                                    throw new IllegalArgumentException("Deve ser informado o nome e sobrenome.");
+                                if (nome.isBlank()) {
+                                    nome = NAO_INFORMADO;
+                                    break;
+                                }
+                                if (nome.split(" ").length != 2) {
+                                    throw new IllegalArgumentException("Deve ser informado (apenas) o nome e sobrenome. Digite novamente: ");
                                 }
                                 if (pattern.matcher(nome).find()) {
-                                    throw new IllegalArgumentException("O nome deve conter apenas letras e espaços.");
+                                    throw new IllegalArgumentException("O nome deve conter apenas letras e espaços. Digite novamente: ");
                                 }
                                 break;
-                            }
-                            catch (IllegalArgumentException error) {
-                                System.out.print("Por favor, digite um nome completo (nome e sobrenome) válido (Sem caracters especiais): ");
+                            } catch (IllegalArgumentException error) {
+                                System.out.print(error.getMessage());
                             }
                         }
                         break;
@@ -74,48 +79,49 @@ public class Main {
 
                         while (true) {
                             try {
-                                int input = Integer.parseInt(terminalInput.nextLine());
-                                switch (input) {
-                                    case 1:
-                                        tipo = TipoPet.CACHORRO;
-                                        break;
-                                    case 2:
-                                        tipo = TipoPet.GATO;
-                                        break;
-                                    default:
-                                        throw new NumberFormatException("Opção inválida. Por favor, digite 1 ou 2.");
+                                String userInput = terminalInput.nextLine();
+                                if (userInput.isBlank()) {
+                                    tipo = TipoPet.NAO_INFORMADO;
+                                    break;
                                 }
+                                int input = Integer.parseInt(userInput);
+                                tipo = switch (input) {
+                                    case 1 -> TipoPet.CACHORRO;
+                                    case 2 -> TipoPet.GATO;
+                                    default ->
+                                            throw new IllegalArgumentException("Opção inválida. Por favor, digite: \n [1] - Cachorro \n [2] - Gato. ");
+                                };
                                 break;
+                            } catch (NumberFormatException error) {
+                                System.out.println("Opção inválida. Por favor, digite 1 ou 2.");
+                                System.out.println("[1] - Cachorro");
+                                System.out.println("[2] - Gato");
                             } catch (IllegalArgumentException error) {
                                 System.out.print(error.getMessage());
                             }
-                            break;
                         }
                         break;
                     case 2:
                         System.out.println("[1] - Macho");
                         System.out.println("[2] - Fêmea");
 
-                        String userInput = terminalInput.nextLine();
-
-                        while (true){
+                        while (true) {
                             try {
-                                int input = Integer.parseInt(userInput);
-                                switch (input) {
-                                    case 1:
-                                        sexo = SexoPet.MACHO;
-                                        break;
-                                    case 2:
-                                        sexo = SexoPet.FEMEA;
-                                        break;
-                                    default:
-                                        throw new NumberFormatException("Opção inválida. Por favor, digite 1 ou 2.");
-                                }
-                            }
-                            catch (NumberFormatException error) {
+                                int input = Integer.parseInt(terminalInput.nextLine());
+                                sexo = switch (input) {
+                                    case 1 -> SexoPet.MACHO;
+                                    case 2 -> SexoPet.FEMEA;
+                                    default ->
+                                            throw new IllegalArgumentException("Opção inválida. Por favor, digite: \n [1] - Macho \n [2] - Fêmea. ");
+                                };
+                                break;
+                            } catch (NumberFormatException error) {
+                                System.out.println("Opção inválida. Por favor, digite 1 ou 2: ");
+                                System.out.println("[1] - Macho");
+                                System.out.println("[2] - Fêmea");
+                            } catch (IllegalArgumentException error) {
                                 System.out.print(error.getMessage());
                             }
-                            break;
                         }
                         break;
                     case 3:
@@ -141,10 +147,16 @@ public class Main {
                         System.out.print("Digite a idade: ");
                         while (true) {
                             try {
-                                idade = Integer.parseInt(terminalInput.nextLine());
+                                String userInput = terminalInput.nextLine();
+                                idade = Double.parseDouble(terminalInput.nextLine().replace(",", "."));
+                                if (idade < 0 || idade > 20) {
+                                    throw new IllegalArgumentException("Idade deve estar entre 0 e 20 anos. Digite novamente: ");
+                                }
                                 break;
                             } catch (NumberFormatException error) {
                                 System.out.print("Por favor, digite um número inteiro válido: ");
+                            } catch (IllegalArgumentException error) {
+                                System.out.print(error.getMessage());
                             }
                         }
                         break;
@@ -152,16 +164,32 @@ public class Main {
                         System.out.print("Digite o peso: ");
                         while (true) {
                             try {
-                                peso = Double.parseDouble(terminalInput.nextLine());
+                                peso = Double.parseDouble(terminalInput.nextLine().replace(",", "."));
+                                if (peso < 0.5 || peso > 60) {
+                                    throw new IllegalArgumentException("Peso deve estar entre 0.5 e 60 kg. Digite novamente: ");
+                                }
                                 break;
                             } catch (NumberFormatException error) {
                                 System.out.print("Por favor, digite um número válido: ");
+                            } catch (IllegalArgumentException error) {
+                                System.out.print(error.getMessage());
                             }
                         }
                         break;
                     case 6:
                         System.out.print("Digite a raça: ");
-                        raca = terminalInput.nextLine();
+                        Pattern pattern = Pattern.compile("[^a-z ]", Pattern.CASE_INSENSITIVE);
+                        while (true) {
+                            try {
+                                raca = terminalInput.nextLine();
+                                if (pattern.matcher(raca).find()) {
+                                    throw new IllegalArgumentException("A raça deve conter apenas letras e espaços. Digite novamente: ");
+                                }
+                                break;
+                            } catch (IllegalArgumentException error) {
+                                System.out.print(error.getMessage());
+                            }
+                        }
                         break;
                 }
                 index++;
@@ -171,7 +199,6 @@ public class Main {
         }
 
         return new Pet(nome, tipo, sexo, endereco, idade, peso, raca);
-
     }
 
     public static Pet handleUserInput(int userInput) {
@@ -219,6 +246,7 @@ public class Main {
         } while (!isValidInput || userInput < 1 || userInput > 6);
 
         pet = handleUserInput(userInput);
+        pet.showDetails();
 
     }
 }
