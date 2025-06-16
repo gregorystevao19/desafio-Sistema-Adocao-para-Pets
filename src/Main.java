@@ -1,11 +1,14 @@
 package src;
 
 import src.domain.Pet;
+import src.domain.SexoPet;
+import src.domain.TipoPet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -24,13 +27,15 @@ public class Main {
         System.out.print("Digite o número da opção desejada: ");
     }
 
-    public static void saveNewPet(Pet pet) {
+    public static Pet saveNewPet() {
+
+        terminalInput.nextLine();
 
         int index = 0;
         String nome = "";
-        String tipo = "";
-        String sexo = "";
-        String endereço = "";
+        TipoPet tipo = null;
+        SexoPet sexo = null;
+        String endereco = "";
         int idade = 0;
         double peso = 0.0;
         String raca = "";
@@ -44,32 +49,103 @@ public class Main {
 
                 switch (index) {
                     case 0:
-                        nome = terminalInput.nextLine();
-                        terminalInput.next();
+                        System.out.print("Digite o nome e sobrenome: ");
+                        while (true) {
+                            try {
+                                Pattern pattern = Pattern.compile("[^a-z ]", Pattern.CASE_INSENSITIVE);
+                                nome = terminalInput.nextLine();
+                                if (nome.split(" ").length < 2) {
+                                    throw new IllegalArgumentException("Deve ser informado o nome e sobrenome.");
+                                }
+                                if (pattern.matcher(nome).find()) {
+                                    throw new IllegalArgumentException("O nome deve conter apenas letras e espaços.");
+                                }
+                                break;
+                            }
+                            catch (IllegalArgumentException error) {
+                                System.out.print("Por favor, digite um nome completo (nome e sobrenome) válido (Sem caracters especiais): ");
+                            }
+                        }
                         break;
                     case 1:
-                        tipo = terminalInput.nextLine();
-                        terminalInput.next();
+                        System.out.println("[1] - Cachorro");
+                        System.out.println("[2] - Gato");
+
+                        while (true) {
+                            try {
+                                int input = Integer.parseInt(terminalInput.nextLine());
+                                switch (input) {
+                                    case 1:
+                                        tipo = TipoPet.CACHORRO;
+                                        break;
+                                    case 2:
+                                        tipo = TipoPet.GATO;
+                                        break;
+                                    default:
+                                        throw new NumberFormatException("Opção inválida. Por favor, digite 1 ou 2.");
+                                }
+                                break;
+                            } catch (IllegalArgumentException error) {
+                                System.out.print(error.getMessage());
+                            }
+                            break;
+                        }
                         break;
                     case 2:
-                        sexo = terminalInput.nextLine();
-                        terminalInput.next();
+                        System.out.println("[1] - Macho");
+                        System.out.println("[2] - Fêmea");
+
+                        String userInput = terminalInput.nextLine();
+
+                        while (true){
+                            try {
+                                int input = Integer.parseInt(userInput);
+                                switch (input) {
+                                    case 1:
+                                        sexo = SexoPet.MACHO;
+                                        break;
+                                    case 2:
+                                        sexo = SexoPet.FEMEA;
+                                        break;
+                                    default:
+                                        throw new NumberFormatException("Opção inválida. Por favor, digite 1 ou 2.");
+                                }
+                            }
+                            catch (NumberFormatException error) {
+                                System.out.print(error.getMessage());
+                            }
+                            break;
+                        }
                         break;
                     case 3:
-                        endereço = terminalInput.nextLine();
-                        terminalInput.next();
+                        System.out.print("Digite o endereço: ");
+                        endereco = terminalInput.nextLine();
                         break;
                     case 4:
-                        idade = terminalInput.nextInt();
-                        terminalInput.next();
+                        System.out.print("Digite a idade: ");
+                        while (true) {
+                            try {
+                                idade = Integer.parseInt(terminalInput.nextLine());
+                                break;
+                            } catch (NumberFormatException error) {
+                                System.out.print("Por favor, digite um número inteiro válido: ");
+                            }
+                        }
                         break;
                     case 5:
-                        peso = terminalInput.nextDouble();
-                        terminalInput.next();
+                        System.out.print("Digite o peso: ");
+                        while (true) {
+                            try {
+                                peso = Double.parseDouble(terminalInput.nextLine());
+                                break;
+                            } catch (NumberFormatException error) {
+                                System.out.print("Por favor, digite um número válido: ");
+                            }
+                        }
                         break;
                     case 6:
+                        System.out.print("Digite a raça: ");
                         raca = terminalInput.nextLine();
-                        terminalInput.next();
                         break;
                 }
                 index++;
@@ -78,14 +154,14 @@ public class Main {
             System.out.println("Arquivo de formulário não encontrado.");
         }
 
-        pet = new Pet(nome, tipo, sexo, endereço, idade, peso, raca);
+        return new Pet(nome, tipo, sexo, endereco, idade, peso, raca);
+
     }
 
-    public static void handleUserInput(int userInput, Pet pet) {
+    public static Pet handleUserInput(int userInput) {
         switch (userInput) {
             case 1:
-                saveNewPet(pet);
-                break;
+                return saveNewPet();
             case 2:
                 System.out.println("Atualizar dados de um pet.");
                 break;
@@ -105,12 +181,14 @@ public class Main {
                 System.out.println("Opção inválida.");
                 break;
         }
+        return null;
     }
 
     public static void main(String[] args) {
 
-        int userInput = 0;
         Pet pet = null;
+
+        int userInput = 0;
         boolean isValidInput = false;
 
         do {
@@ -124,8 +202,7 @@ public class Main {
             }
         } while (!isValidInput || userInput < 1 || userInput > 6);
 
-        handleUserInput(userInput, pet);
-        System.out.println(pet.getPeso());
+        pet = handleUserInput(userInput);
 
     }
 }

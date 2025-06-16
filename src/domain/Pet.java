@@ -2,18 +2,18 @@ package src.domain;
 
 public class Pet {
     private String nome;
-    private String tipo;
-    private String sexo;
-    private String endereço;
+    private TipoPet tipo;
+    private SexoPet sexo;
+    private String endereco;
     private int idade;
     private double peso;
     private String raca;
 
-    public Pet(String nome, String tipo, String sexo, String endereço, int idade, double peso, String raca) {
+    public Pet(String nome, TipoPet tipo, SexoPet sexo, String endereco, int idade, double peso, String raca) {
         this.nome = nome;
         this.tipo = tipo;
         this.sexo = sexo;
-        this.endereço = endereço;
+        this.endereco = endereco;
         this.idade = idade;
         this.peso = peso;
         this.raca = raca;
@@ -27,28 +27,28 @@ public class Pet {
         this.nome = nome;
     }
 
-    public String getTipo() {
+    public TipoPet getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoPet tipo) {
         this.tipo = tipo;
     }
 
-    public String getSexo() {
+    public SexoPet getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(SexoPet sexo) {
         this.sexo = sexo;
     }
 
     public String getEndereço() {
-        return endereço;
+        return endereco;
     }
 
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     public int getIdade() {
@@ -73,5 +73,15 @@ public class Pet {
 
     public void setRaca(String raca) {
         this.raca = raca;
+    }
+
+    public void showDetails() {
+        System.out.println("Nome: " + this.nome);
+        System.out.println("Tipo: " + this.tipo);
+        System.out.println("Sexo: " + this.sexo);
+        System.out.println("Endereço: " + this.endereco);
+        System.out.println("Idade: " + this.idade);
+        System.out.println("Peso: " + this.peso);
+        System.out.println("Raça: " + this.raca);
     }
 }
